@@ -1,6 +1,6 @@
 FROM ruby:2.6.1-alpine3.8
 
-ENV NODE_VERSION 12.22.9
+ENV NODE_VERSION 10.16.0
 
 RUN addgroup -g 1000 node \
     && adduser -u 1000 -G node -s /bin/sh -D node \
@@ -12,10 +12,19 @@ RUN addgroup -g 1000 node \
       && case "${alpineArch##*-}" in \
         x86_64) \
           ARCH='x64' \
-          CHECKSUM="4d72694d1e97ebc6eeca5f0401aef471d412e67c057a0c7cc7d79740af3d3d13" \
+          CHECKSUM="ee21d9831a493a1d64278367e1e1d7c8110a5b801f5b285dc973150896212556" \
           ;; \
         *) ;; \
-      esac; \
+      esac \
+  && if [ -n "${CHECKSUM}" ]; then \
+    set -eu; \
+    curl -fsSLkO --compressed "https://unofficial-builds.nodejs.org/download/release/v$NODE_VERSION/node-v$NODE_VERSION-linux-$ARCH-musl.tar.xz"; \
+    echo "$CHECKSUM  node-v$NODE_VERSION-linux-$ARCH-musl.tar.xz" | sha256sum -c - \
+      && tar -xJf "node-v$NODE_VERSION-linux-$ARCH-musl.tar.xz" -C /usr/local --strip-components=1 --no-same-owner \
+      && ln -s /usr/local/bin/node /usr/local/bin/nodejs; \
+  else \
+    echo "Building from source" \
+    # backup build
     apk add --no-cache --virtual .build-deps-full \
         binutils-gold \
         g++ \
@@ -54,9 +63,10 @@ RUN addgroup -g 1000 node \
     && apk del .build-deps-full \
     && cd .. \
     && rm -Rf "node-v$NODE_VERSION" \
-    && rm "node-v$NODE_VERSION.tar.xz" SHASUMS256.txt.asc SHASUMS256.txt \
+    && rm "node-v$NODE_VERSION.tar.xz" SHASUMS256.txt.asc SHASUMS256.txt; \
+  fi \
     && rm -f "node-v$NODE_VERSION-linux-$ARCH-musl.tar.xz" \
-    && apk del .build-deps \
+    && apk add --no-cache git mariadb-dev \
     # smoke tests
     && node --version \
     && npm --version
