@@ -104,6 +104,7 @@ RUN apk add --no-cache --virtual .build-deps \
     patch \
     ttf2ufm \
     linux-headers \
+    tzdata \
     zlib-dev
 
 CMD [ "irb" ]
