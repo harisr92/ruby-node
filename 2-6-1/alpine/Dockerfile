@@ -97,11 +97,13 @@ RUN apk add --no-cache --virtual .build-deps \
     coreutils \
     freetds-dev \
     gcc \
+    g++ \
     make \
     mariadb-dev \
     musl-dev \
     patch \
     ttf2ufm \
+    linux-headers \
     zlib-dev
 
 CMD [ "irb" ]
