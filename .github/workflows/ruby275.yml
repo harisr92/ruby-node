@@ -30,4 +30,4 @@ jobs:
         with:
           context: ./2-7-5/alpine/.
           push: true
-          tags: harisr/ruby-node:2-7-5alpine harisr/ruby-node:latest
+          tags: harisr/ruby-node:2-7-5alpine, harisr/ruby-node:latest
