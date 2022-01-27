@@ -66,7 +66,6 @@ RUN addgroup -g 1000 node \
     && rm "node-v$NODE_VERSION.tar.xz" SHASUMS256.txt.asc SHASUMS256.txt; \
   fi \
     && rm -f "node-v$NODE_VERSION-linux-$ARCH-musl.tar.xz" \
-    && apk add --no-cache git mariadb-dev \
     # smoke tests
     && node --version \
     && npm --version
@@ -88,8 +87,21 @@ RUN apk add --no-cache --virtual .build-deps-yarn curl gnupg tar \
   && ln -s /opt/yarn-v$YARN_VERSION/bin/yarn /usr/local/bin/yarn \
   && ln -s /opt/yarn-v$YARN_VERSION/bin/yarnpkg /usr/local/bin/yarnpkg \
   && rm yarn-v$YARN_VERSION.tar.gz.asc yarn-v$YARN_VERSION.tar.gz \
-  && apk del .build-deps-yarn \
   # smoke test
   && yarn --version
+
+# install rails deps
+RUN apk add --no-cache --virtual .build-deps \
+    git \
+    shared-mime-info \
+    coreutils \
+    freetds-dev \
+    gcc \
+    make \
+    mariadb-dev \
+    musl-dev \
+    patch \
+    ttf2ufm \
+    zlib-dev
 
 CMD [ "irb" ]
