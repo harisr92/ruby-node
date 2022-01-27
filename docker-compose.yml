@@ -1,0 +1,5 @@
+services:
+  ruby-node-261:
+    image: ruby-node:2-6-1-alpine
+    build: 2-6-1/alpine/.
+    command: ls -la /usr/local/bin
