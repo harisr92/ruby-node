@@ -30,14 +30,11 @@ jobs:
         with:
           context: ./2-6-1/alpine/.
           push: true
-          tags:
-            - harisr/ruby-node:2-6-1alpine
+          tags: harisr/ruby-node:2-6-1alpine
       -
         name: Build and push 2.7.5
         uses: docker/build-push-action@v2
         with:
-          context: ./2-6-1/alpine/.
+          context: ./2-7-5/alpine/.
           push: true
-          tags:
-            - harisr/ruby-node:2-7-5alpine
-            - harisr/ruby-node:latest
+          tags: harisr/ruby-node:2-7-5alpine harisr/ruby-node:latest
