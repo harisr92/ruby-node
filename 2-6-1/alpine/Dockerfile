@@ -25,7 +25,7 @@ RUN addgroup -g 1000 node \
   else \
     echo "Building from source" \
     # backup build
-    apk add --no-cache --virtual .build-deps-full \
+    && apk add --no-cache --virtual .build-deps-full \
         binutils-gold \
         g++ \
         gcc \
